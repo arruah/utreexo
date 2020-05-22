@@ -27,8 +27,8 @@ OPTIONS:
 
 // bit of a hack. Standard flag lib doesn't allow flag.Parse(os.Args[2]). You need a subcommand to do so.
 var optionCmd = flag.NewFlagSet("", flag.ExitOnError)
-var netCmd = optionCmd.String("net", "mainnet",
-	"Target testnet or regtest instead of mainnet. Usage: '-net=regtest' or '-net=testnet'")
+var netCmd = optionCmd.String("net", "testnet",
+	"Target network. (testnet, regtest, mainnet) Usage: '-net=regtest'")
 
 func main() {
 	// check if enough arguments were given
