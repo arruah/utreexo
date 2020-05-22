@@ -36,20 +36,13 @@ func main() {
 		fmt.Println(msg)
 		os.Exit(1)
 	}
-	var ttldb, offsetfile string
 	optionCmd.Parse(os.Args[2:])
 	var param chaincfg.Params // wire.BitcoinNet
 	if *netCmd == "testnet" {
-		ttldb = "testnet-ttldb"
-		offsetfile = "testnet-offsetfile"
 		param = chaincfg.TestNet3Params
 	} else if *netCmd == "regtest" {
-		ttldb = "regtest-ttldb"
-		offsetfile = "regtest-offsetfile"
 		param = chaincfg.RegressionNetParams
 	} else if *netCmd == "mainnet" {
-		ttldb = "ttldb"
-		offsetfile = "offsetfile"
 		param = chaincfg.MainNetParams
 	} else {
 		fmt.Println("Invalid net flag given.")
@@ -62,12 +55,12 @@ func main() {
 
 	switch os.Args[1] {
 	case "ibdsim":
-		err := csn.RunIBD(&param, offsetfile, ttldb, sig)
+		err := csn.RunIBD(&param, sig)
 		if err != nil {
 			panic(err)
 		}
 	case "genproofs":
-		err := bridge.BuildProofs(param, ttldb, offsetfile, sig)
+		err := bridge.BuildProofs(param, sig)
 		if err != nil {
 			panic(err)
 		}

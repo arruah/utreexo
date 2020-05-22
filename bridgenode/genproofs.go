@@ -16,8 +16,7 @@ import (
 )
 
 // build the bridge node / proofs
-func BuildProofs(
-	net chaincfg.Params, ttlpath, offsetfile string, sig chan bool) error {
+func BuildProofs(param chaincfg.Params, sig chan bool) error {
 
 	// Channel to alert the tell the main loop it's ok to exit
 	haltRequest := make(chan bool, 1)
@@ -34,18 +33,19 @@ func BuildProofs(
 
 	// If given the option testnet=true, check if the blk00000.dat file
 	// in the directory is a testnet file. Vise-versa for mainnet
-	util.CheckNet(net)
+	util.CheckNet(param)
 
 	// Creates all the directories needed for bridgenode
 	util.MakePaths()
 
 	// Init forest and variables. Resumes if the data directory exists
 	forest, height, knownTipHeight, err :=
-		initBridgeNodeState(net, offsetFinished)
+		initBridgeNodeState(param, offsetFinished)
 	if err != nil {
 		panic(err)
 	}
 
+	ttlpath := param.Name + "ttldb"
 	// Open leveldb
 	o := new(opt.Options)
 	o.CompactionTableSizeMultiplier = 8
